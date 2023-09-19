@@ -1,0 +1,99 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xacmedatabases.acme.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: acme.com/v1
+    kind: XAcmeDatabase
+  resources:
+    - name: NopResource
+      base:
+        apiVersion: nop.crossplane.io/v1alpha1
+        kind: NopResource
+        spec:
+          forProvider:
+            fields:
+              stringField: "cool"
+              combineField: "cooler"
+          writeConnectionSecretToRef:
+            namespace: crossplane-system
+      patches:
+        - fromFieldPath: "metadata.uid"
+          toFieldPath: "spec.writeConnectionSecretToRef.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-nop"
+    - name: NopResource2
+      base:
+        apiVersion: nop.crossplane.io/v1alpha1
+        kind: NopResource
+        spec:
+          forProvider:
+            fields:
+              stringField: "cool"
+              combineField: "cooler"
+          writeConnectionSecretToRef:
+            namespace: crossplane-system
+      patches:
+        - fromFieldPath: "metadata.uid"
+          toFieldPath: "spec.writeConnectionSecretToRef.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-nop"
+    - name: NopResource3
+      base:
+        apiVersion: nop.crossplane.io/v1alpha1
+        kind: NopResource
+        spec:
+          forProvider:
+            fields:
+              stringField: "cool"
+              combineField: "cooler"
+          writeConnectionSecretToRef:
+            namespace: crossplane-system
+      patches:
+        - fromFieldPath: "metadata.uid"
+          toFieldPath: "spec.writeConnectionSecretToRef.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-nop"
+    - name: NopResource4
+      base:
+        apiVersion: nop.crossplane.io/v1alpha1
+        kind: NopResource
+        spec:
+          forProvider:
+            fields:
+              stringField: "cool"
+              combineField: "cooler"
+          writeConnectionSecretToRef:
+            namespace: crossplane-system
+      patches:
+        - fromFieldPath: "metadata.uid"
+          toFieldPath: "spec.writeConnectionSecretToRef.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-nop"
+    - name: NopResourceProviderConfig
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: ProviderConfig
+        spec:
+          credentials:
+            source: Secret
+            secretRef:
+              key: kubeconfig
+              name: test
+              namespace: default
+      patches:
+        - fromFieldPath: spec.userStr
+          toFieldPath: metadata.name
+      readinessChecks:
+        - type: None
